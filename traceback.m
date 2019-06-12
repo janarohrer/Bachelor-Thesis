@@ -1,20 +1,22 @@
 function [D] = traceback(info,D,D_iso,grid_norm,sorted_mr,map,slices_mr,center_phantom)
-%TRACEBACK INPUT:  [dist_iso distortion] 
-% OUTPUT: 3Dplot with marked point at MR coord
-%   Detailed explanation goes here
+%TRACEBACK INPUT:  
+% OUTPUT: 
+%  
+
+%% 3D plot with marked point
 m = 63/(max(D));
 figure; hold on; title('3D plot with chosen point in pink')
 xlabel('x');ylabel('y'),zlabel('z')
 pcshow(pointCloud([0 0 0]));
 colormap jet; colorbar;caxis([0 max(D)]);
-colorbar('Ticks',[0,1,2,max(D)],...
-         'TickLabels',{0,1,2,max(D)})
+cb = colorbar('Ticks',[0,1,max(D)],...
+         'TickLabels',{0,1,max(D)},'Color','w');
+ylabel(cb, 'Distortion in mm', 'Color', 'white')
 for point = 1:size(D)
     if D(point) >=0 %excluding points that haven't been found
     color = round(m*D(point)+1);
     plot3(grid_norm(point,1),grid_norm(point,3),-grid_norm(point,2),'+','Color',map(color,:),'MarkerSize',8,'LineWidth',2)
     end
-    
 end
 distortion = info(2);
 distance_iso = info(1);
@@ -45,7 +47,6 @@ if input('Do you want to delete this point? ','s') == 'yes'
 else
     D = D(:);
 end
-
 
 end
 
